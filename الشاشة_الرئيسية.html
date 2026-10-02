@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bavly Kids - الشاشة الرئيسية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden text-slate-800">
+
+    <!-- القائمة الجانبية (Sidebar) -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-xl shrink-0 z-20">
+        <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl">👶</span>
+                <div>
+                    <h1 class="text-xl font-extrabold text-pink-400 leading-tight">Bavly Kids</h1>
+                    <p class="text-[11px] text-slate-400">إدارة المحل والمصنع</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a href="الشاشة_الرئيسية.html" class="flex items-center gap-3 py-3 px-4 rounded-xl bg-pink-600 text-white font-bold shadow-md shadow-pink-600/20">
+                <span class="text-lg">📊</span>
+                <span>الشاشة الرئيسية</span>
+            </a>
+            <a href="الفاتورة.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">🧾</span>
+                <span>الفاتورة (البيع)</span>
+            </a>
+            <a href="المخزن.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">📦</span>
+                <span>المخزن والموديلات</span>
+            </a>
+            <a href="فواتير_الموردين.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">🚚</span>
+                <span>فواتير وبيانات الموردين</span>
+            </a>
+            <a href="الشيكات_والتسديد.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">💳</span>
+                <span>الشيكات والتسديد</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-800 text-center">
+            <button onclick="promptChangeScriptUrl()" class="w-full text-xs text-slate-400 hover:text-pink-300 py-1.5 px-2 rounded border border-slate-700 hover:border-pink-500 transition">
+                ⚙️ إعدادات رابط جوجل شيت
+            </button>
+        </div>
+    </aside>
+
+    <!-- المحتوى الرئيسي (Main Content) -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+        
+        <!-- الهيدر والترحيب والتحكم السحابي -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">مرحباً بك في لوحة تحكم Bavly Kids 👋</h2>
+                <p class="text-sm text-slate-500 mt-1">متابعة فورية للمبيعات، المخزن، مستحقات الموردين والشيكات</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="cloudStatus" class="bg-emerald-50 text-emerald-700 border border-emerald-300 text-xs px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1.5 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    متصل بالنظام
+                </span>
+                <button onclick="refreshDashboard()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs px-4 py-2.5 rounded-xl font-bold transition flex items-center gap-2 shadow-sm">
+                    <span>🔄</span> تحديث البيانات
+                </button>
+            </div>
+        </div>
+
+        <!-- أزرار الإجراءات السريعة (مطلوبة نصاً: يتاح منها عمل فاتورة ومخزن وموردين) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a href="الفاتورة.html" class="flex items-center justify-between p-5 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-2xl shadow-lg shadow-pink-600/20 hover:scale-[1.02] transition-transform">
+                <div>
+                    <h3 class="font-bold text-lg">عمل فاتورة بيع جديدة</h3>
+                    <p class="text-xs text-pink-100 mt-1">تسجيل فاتورة سريعة وطباعتها</p>
+                </div>
+                <span class="text-3xl bg-white/20 p-2.5 rounded-xl">🧾</span>
+            </a>
+
+            <a href="المخزن.html" class="flex items-center justify-between p-5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-2xl shadow-lg shadow-indigo-600/20 hover:scale-[1.02] transition-transform">
+                <div>
+                    <h3 class="font-bold text-lg">إدارة المخزن</h3>
+                    <p class="text-xs text-indigo-100 mt-1">إضافة وتعديل موديلات وأسعار</p>
+                </div>
+                <span class="text-3xl bg-white/20 p-2.5 rounded-xl">📦</span>
+            </a>
+
+            <a href="فواتير_الموردين.html" class="flex items-center justify-between p-5 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-2xl shadow-lg shadow-teal-600/20 hover:scale-[1.02] transition-transform">
+                <div>
+                    <h3 class="font-bold text-lg">فواتير وبيانات الموردين</h3>
+                    <p class="text-xs text-teal-100 mt-1">تسجيل فواتير الشراء ودليل الموردين</p>
+                </div>
+                <span class="text-3xl bg-white/20 p-2.5 rounded-xl">🚚</span>
+            </a>
+
+            <a href="الشيكات_والتسديد.html" class="flex items-center justify-between p-5 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-2xl shadow-lg shadow-amber-600/20 hover:scale-[1.02] transition-transform">
+                <div>
+                    <h3 class="font-bold text-lg">الشيكات والتسديد</h3>
+                    <p class="text-xs text-amber-100 mt-1">متابعة الديون وكشف حساب المورد</p>
+                </div>
+                <span class="text-3xl bg-white/20 p-2.5 rounded-xl">💳</span>
+            </a>
+        </div>
+
+        <!-- كروت الإحصائيات المالية والحسابية -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- ديون الموردين (الميزة المطلوبة: أنا عليا كام تلقائي) -->
+            <div class="bg-white p-6 rounded-2xl border-2 border-rose-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 left-0 h-1 bg-rose-500"></div>
+                <p class="text-xs font-bold text-rose-500 uppercase tracking-wider">مستحق للموردين (عليّ كام)</p>
+                <h3 id="statTotalDebt" class="text-3xl font-extrabold text-rose-600 mt-3">0 ج.م</h3>
+                <p class="text-xs text-slate-400 mt-2">محسوبة تلقائياً من فواتير الشراء</p>
+            </div>
+
+            <!-- إجمالي المبيعات المسجلة -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 left-0 h-1 bg-emerald-500"></div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">إجمالي المبيعات</p>
+                <h3 id="statTotalSales" class="text-3xl font-extrabold text-emerald-600 mt-3">0 ج.م</h3>
+                <p id="statInvoicesCount" class="text-xs text-slate-400 mt-2">0 فواتير مسجلة</p>
+            </div>
+
+            <!-- إجمالي عدد قطع المخزن -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 left-0 h-1 bg-blue-500"></div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">إجمالي قطع المخزن</p>
+                <h3 id="statTotalStockQty" class="text-3xl font-extrabold text-blue-600 mt-3">0 قطعة</h3>
+                <p id="statStockModelsCount" class="text-xs text-slate-400 mt-2">0 موديل مختلف</p>
+            </div>
+
+            <!-- القيمة التقديرية للمخزون بالجملة -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 left-0 h-1 bg-purple-500"></div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">قيمة بضاعة المخزن (بالجملة)</p>
+                <h3 id="statStockValue" class="text-3xl font-extrabold text-purple-600 mt-3">0 ج.م</h3>
+                <p class="text-xs text-slate-400 mt-2">رأس المال في البضاعة الحالية</p>
+            </div>
+        </div>
+
+        <!-- قسم التنبيهات ونواقص المخزن والشيكات القادمة -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- تنبيهات الشيكات المستحقة قريباً -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+                        <span>⏰</span> شيكات مستحقة قريباً
+                    </h3>
+                    <a href="الشيكات_والتسديد.html" class="text-xs text-pink-600 font-bold hover:underline">عرض الكل ←</a>
+                </div>
+                <div id="dueChecksList" class="space-y-3">
+                    <!-- ديناميكي -->
+                </div>
+            </div>
+
+            <!-- نواقص المخزن (أقل من 5 قطع) -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+                        <span>⚠️</span> نواقص المخزن (أقل من 5 قطع)
+                    </h3>
+                    <a href="المخزن.html" class="text-xs text-pink-600 font-bold hover:underline">المخزن بالكامل ←</a>
+                </div>
+                <div id="lowStockList" class="space-y-3">
+                    <!-- ديناميكي -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        function renderDashboard() {
+            // 1. حساب مديونية الموردين (أنا عليا كام)
+            const totalDebt = SupplierDB.getTotalDebt();
+            document.getElementById('statTotalDebt').innerText = totalDebt.toLocaleString() + ' ج.م';
+
+            // 2. إحصائيات المبيعات
+            const sales = SalesDB.getAll();
+            const totalSales = sales.reduce((sum, s) => sum + (Number(s.netTotal) || 0), 0);
+            document.getElementById('statTotalSales').innerText = totalSales.toLocaleString() + ' ج.م';
+            document.getElementById('statInvoicesCount').innerText = `${sales.length} فاتورة مسجلة`;
+
+            // 3. إحصائيات المخزن
+            const inv = InventoryDB.getAll();
+            const totalStockQty = inv.reduce((sum, i) => sum + (Number(i.qty) || 0), 0);
+            const totalStockValue = inv.reduce((sum, i) => sum + ((Number(i.qty) || 0) * (Number(i.costPrice) || 0)), 0);
+            document.getElementById('statTotalStockQty').innerText = `${totalStockQty.toLocaleString()} قطعة`;
+            document.getElementById('statStockModelsCount').innerText = `${inv.length} موديل مختلف`;
+            document.getElementById('statStockValue').innerText = `${totalStockValue.toLocaleString()} ج.م`;
+
+            // 4. الشيكات القادمة
+            const checks = CheckDB.getAll().filter(c => c.status !== "تم التسديد");
+            const checksContainer = document.getElementById('dueChecksList');
+            if (checks.length === 0) {
+                checksContainer.innerHTML = `<div class="p-4 bg-emerald-50 text-emerald-700 rounded-xl text-sm font-semibold">🎉 لا توجد شيكات معلقة حالياً، جميع الشيكات مسددة!</div>`;
+            } else {
+                checksContainer.innerHTML = checks.slice(0, 3).map(c => `
+                    <div class="flex items-center justify-between p-3.5 bg-amber-50/70 border border-amber-200 rounded-xl">
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">شيك رقم: <span class="font-mono">${c.checkNo}</span> (${c.supplierName})</div>
+                            <div class="text-xs text-amber-800 mt-1">تاريخ الاستحقاق: ${c.dueDate || 'غير محدد'} | البنك: ${c.bank}</div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold text-rose-600 block text-sm">${(Number(c.remaining) || Number(c.total)).toLocaleString()} ج.م</span>
+                            <span class="text-[10px] bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full font-bold">${c.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // 5. نواقص المخزن
+            const lowStock = inv.filter(i => Number(i.qty) <= 5);
+            const lowStockContainer = document.getElementById('lowStockList');
+            if (lowStock.length === 0) {
+                lowStockContainer.innerHTML = `<div class="p-4 bg-emerald-50 text-emerald-700 rounded-xl text-sm font-semibold">👍 المخزون بحالة ممتازة، لا توجد نواقص أقل من 5 قطع.</div>`;
+            } else {
+                lowStockContainer.innerHTML = lowStock.slice(0, 3).map(i => `
+                    <div class="flex items-center justify-between p-3.5 bg-rose-50/70 border border-rose-200 rounded-xl">
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">${i.name} (${i.code})</div>
+                            <div class="text-xs text-rose-700 mt-1">اللون: ${i.colors} | المقاس: ${i.size}</div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold text-rose-600 text-sm bg-rose-100 px-2.5 py-1 rounded-lg">متبقي: ${i.qty} قطع</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function refreshDashboard() {
+            showToast("جاري مزامنة وتحديث البيانات من جوجل شيت...");
+            const synced = await fetchAllFromCloud();
+            renderDashboard();
+            if (synced) {
+                showToast("تم تحديث البيانات بنجاح من Google Sheets!");
+            } else {
+                showToast("تم تحديث الشاشة بالبيانات المحلية المحفوظة.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+            fetchAllFromCloud().then(() => renderDashboard());
+        });
+    </script>
+</body>
+</html>

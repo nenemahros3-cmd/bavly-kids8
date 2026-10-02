@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bavly Kids - فواتير وبيانات الموردين</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .tab-section { display: none; }
+        .tab-section.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden text-slate-800">
+
+    <!-- القائمة الجانبية (Sidebar) -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-xl shrink-0 z-20">
+        <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl">👶</span>
+                <div>
+                    <h1 class="text-xl font-extrabold text-pink-400 leading-tight">Bavly Kids</h1>
+                    <p class="text-[11px] text-slate-400">إدارة المحل والمصنع</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a href="الشاشة_الرئيسية.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">📊</span>
+                <span>الشاشة الرئيسية</span>
+            </a>
+            <a href="الفاتورة.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">🧾</span>
+                <span>الفاتورة (البيع)</span>
+            </a>
+            <a href="المخزن.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">📦</span>
+                <span>المخزن والموديلات</span>
+            </a>
+            <a href="فواتير_الموردين.html" class="flex items-center gap-3 py-3 px-4 rounded-xl bg-pink-600 text-white font-bold shadow-md shadow-pink-600/20">
+                <span class="text-lg">🚚</span>
+                <span>فواتير وبيانات الموردين</span>
+            </a>
+            <a href="الشيكات_والتسديد.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">💳</span>
+                <span>الشيكات والتسديد</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- المحتوى الرئيسي (Main Content) -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+        
+        <!-- الهيدر والتبديل بين الفواتير وبيانات الموردين -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">إدارة فواتير ودليل الموردين 🚚</h2>
+                <p class="text-xs text-slate-500 mt-1">تسجيل فواتير الشراء المبسطة ورفع صورها، وإدارة دليل بيانات الموردين والمصانع</p>
+            </div>
+            
+            <!-- أزرار التبديل بين التبويبين -->
+            <div class="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+                <button onclick="switchView('invoices')" id="tabBtn-invoices" class="px-5 py-2 rounded-lg text-xs font-bold transition bg-pink-600 text-white shadow-sm">
+                    🧾 فواتير الشراء
+                </button>
+                <button onclick="switchView('profiles')" id="tabBtn-profiles" class="px-5 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                    🏢 دليل بيانات الموردين
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= التبويب 1: فواتير الشراء (المبسطة بدون موديل) ================= -->
+        <div id="section-invoices" class="tab-section active space-y-6">
+            
+            <!-- شريط العمليات وملخص الفواتير -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full sm:w-auto flex-1">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-[11px] font-bold text-slate-500 block">إجمالي مشتريات البضاعة</span>
+                        <strong id="statTotalPurchases" class="text-xl font-extrabold text-slate-800">0 ج.م</strong>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-[11px] font-bold text-slate-500 block">المسدد كاش</span>
+                        <strong id="statTotalPaid" class="text-xl font-extrabold text-emerald-600">0 ج.م</strong>
+                    </div>
+                    <div class="bg-rose-50 p-4 rounded-xl border border-rose-200 shadow-sm">
+                        <span class="text-[11px] font-bold text-rose-500 block">المتبقي عليّ للموردين</span>
+                        <strong id="statTotalRemaining" class="text-xl font-extrabold text-rose-600">0 ج.م</strong>
+                    </div>
+                </div>
+
+                <button onclick="openSupplierModal()" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-3 rounded-xl font-bold transition flex items-center gap-2 shadow-lg shadow-pink-600/20 shrink-0">
+                    <span>+</span> تسجيل فاتورة شراء جديدة
+                </button>
+            </div>
+
+            <!-- جدول فواتير الموردين المبسط -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                                <th class="p-4">رقم الفاتورة</th>
+                                <th class="p-4">اسم المورد / المصنع</th>
+                                <th class="p-4">تاريخ الفاتورة</th>
+                                <th class="p-4 text-center">الكمية</th>
+                                <th class="p-4">مبلغ شراء البضاعة</th>
+                                <th class="p-4">المدفوع كاش</th>
+                                <th class="p-4">المتبقي (مديونية)</th>
+                                <th class="p-4 text-center">صورة الفاتورة</th>
+                                <th class="p-4 text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplierInvoicesTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- ديناميكي -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= التبويب 2: دليل وبيانات الموردين (جديد) ================= -->
+        <div id="section-profiles" class="tab-section space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-800">سجل ودليل بيانات الموردين والمصانع 🏢</h3>
+                    <p class="text-xs text-slate-500">حفظ بيانات الاتصال والعناوين وحساب المديونية التراكمية لكل مورد</p>
+                </div>
+                <button onclick="openProfileModal()" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold transition flex items-center gap-2 shadow-md">
+                    <span>+</span> إضافة مورد جديد للدليل
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                                <th class="p-4">كود المورد</th>
+                                <th class="p-4">اسم المورد / المصنع</th>
+                                <th class="p-4">رقم التليفون</th>
+                                <th class="p-4">العنوان</th>
+                                <th class="p-4 text-center">عدد فواتير الشراء</th>
+                                <th class="p-4 text-rose-600">المتبقي له (عليّ كام)</th>
+                                <th class="p-4">ملاحظات</th>
+                                <th class="p-4 text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplierProfilesTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- ديناميكي -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal 1: تسجيل فاتورة شراء جديدة (مبسطة تماماً بدون موديل) -->
+    <div id="supplierModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-lg shadow-2xl space-y-5">
+            <div class="flex justify-between items-center border-b pb-3">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">تسجيل فاتورة شراء بضاعة 🧾</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">المطلوب فقط: رقم الفاتورة، اسم المورد، الكمية، ومبلغ البضاعة</p>
+                </div>
+                <button onclick="closeSupplierModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+            </div>
+
+            <form id="supInvoiceForm" onsubmit="handleSupplierInvoiceSubmit(event)" class="space-y-4">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">رقم الفاتورة *</label>
+                        <input type="text" id="supInvNo" placeholder="مثال: SUP-503" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-mono focus:border-pink-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">اسم المورد / المصنع *</label>
+                        <input type="text" id="supName" list="registeredSuppliersList" placeholder="اكتب أو اختر المورد" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                        <datalist id="registeredSuppliersList"></datalist>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">الكمية الإجمالية *</label>
+                        <input type="number" id="supQty" min="1" value="1" placeholder="عدد القطع" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-bold text-center focus:border-pink-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ الذي اشتريت به بضاعة (ج.م) *</label>
+                        <input type="number" id="supTotal" min="0" step="0.5" placeholder="0" oninput="calcSupplierTotals()" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-extrabold text-slate-900 focus:border-pink-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">المبلغ المدفوع كاش (إن وُجد)</label>
+                        <input type="number" id="supPaid" min="0" step="0.5" value="0" oninput="calcSupplierTotals()" class="w-full bg-white border border-slate-300 rounded-xl p-2.5 text-sm font-bold text-emerald-600 focus:border-pink-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">المتبقي (مديونية تلقائية)</label>
+                        <input type="text" id="supRemaining" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl p-2.5 text-sm font-bold text-rose-600 outline-none">
+                    </div>
+                </div>
+
+                <!-- ميزة رفع صورة الفاتورة الورقية -->
+                <div class="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center hover:border-pink-500 transition">
+                    <label class="block text-xs font-bold text-slate-700 mb-2">📸 رفع صورة الفاتورة الورقية (اختياري)</label>
+                    <input type="file" id="supInvoiceImageInput" accept="image/*" onchange="previewInvoiceImage(event)" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
+                    <div id="imagePreviewContainer" class="hidden mt-3">
+                        <img id="imagePreview" src="" class="max-h-28 mx-auto rounded-lg shadow border">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3">
+                    <button type="button" onclick="closeSupplierModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-100 transition">إلغاء</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-bold shadow-lg shadow-pink-600/20 transition">حفظ الفاتورة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: إضافة أو تعديل مورد في الدليل -->
+    <div id="profileModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl space-y-5">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="profileModalTitle" class="text-xl font-bold text-slate-800">إضافة مورد جديد للدليل 🏢</h3>
+                <button onclick="closeProfileModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+            </div>
+
+            <form id="profileForm" onsubmit="handleProfileSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المورد / المصنع *</label>
+                    <input type="text" id="profName" placeholder="مثال: مصنع الأمل للملابس" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رقم التليفون</label>
+                    <input type="text" id="profPhone" placeholder="01xxxxxxxxx" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">العنوان</label>
+                    <input type="text" id="profAddress" placeholder="مثال: العاشر من رمضان / المحلة" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">ملاحظات / نوع البضاعة</label>
+                    <input type="text" id="profNotes" placeholder="مثال: توريد ملابس صيفي وتريكو" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3">
+                    <button type="button" onclick="closeProfileModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-100 transition">إلغاء</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold shadow-md transition">حفظ بيانات المورد</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة معاينة صورة الفاتورة بالحجم الكامل -->
+    <div id="viewImageModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="relative max-w-3xl w-full text-center">
+            <button onclick="closeImageViewer()" class="absolute -top-10 left-0 text-white text-2xl font-bold bg-slate-800/80 px-3 py-1 rounded-full">✕ إغلاق</button>
+            <img id="modalFullImage" src="" class="max-h-[85vh] mx-auto rounded-2xl shadow-2xl border-2 border-white">
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let currentUploadedImageBase64 = "";
+
+        // التبديل بين الشاشات
+        function switchView(view) {
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('tabBtn-invoices').className = "px-5 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+            document.getElementById('tabBtn-profiles').className = "px-5 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+
+            if (view === 'invoices') {
+                document.getElementById('section-invoices').classList.add('active');
+                document.getElementById('tabBtn-invoices').className = "px-5 py-2 rounded-lg text-xs font-bold transition bg-pink-600 text-white shadow-sm";
+                renderSupplierInvoices();
+            } else {
+                document.getElementById('section-profiles').classList.add('active');
+                document.getElementById('tabBtn-profiles').className = "px-5 py-2 rounded-lg text-xs font-bold transition bg-slate-900 text-white shadow-sm";
+                renderSupplierProfiles();
+            }
+        }
+
+        // ================= 1. قسم الفواتير =================
+        function renderSupplierInvoices() {
+            const list = SupplierDB.getAll();
+            const tbody = document.getElementById('supplierInvoicesTableBody');
+
+            const totalPurchases = list.reduce((s, i) => s + (Number(i.total) || 0), 0);
+            const totalPaid = list.reduce((s, i) => s + (Number(i.paid) || 0), 0);
+            const totalRemaining = list.reduce((s, i) => s + (Number(i.remaining) || 0), 0);
+
+            document.getElementById('statTotalPurchases').innerText = `${totalPurchases.toLocaleString()} ج.م`;
+            document.getElementById('statTotalPaid').innerText = `${totalPaid.toLocaleString()} ج.م`;
+            document.getElementById('statTotalRemaining').innerText = `${totalRemaining.toLocaleString()} ج.م`;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-400">لا توجد فواتير شراء مسجلة حتى الآن</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map(inv => {
+                const imgCell = inv.imageUrl ? `
+                    <img src="${inv.imageUrl}" onclick="viewFullImage('${inv.imageUrl}')" class="w-10 h-10 object-cover rounded-lg border border-slate-300 cursor-pointer hover:opacity-80 mx-auto" title="اضغط للتكبير">
+                ` : `<span class="text-xs text-slate-400 italic">بدون صورة</span>`;
+
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-4 font-mono font-bold text-slate-800">${inv.invoiceNo}</td>
+                        <td class="p-4 font-bold text-slate-800">${inv.supplierName}</td>
+                        <td class="p-4 text-slate-500 text-xs">${inv.date}</td>
+                        <td class="p-4 font-bold text-center">${inv.qty} قطعة</td>
+                        <td class="p-4 font-extrabold text-slate-900">${Number(inv.total).toLocaleString()} ج.م</td>
+                        <td class="p-4 font-bold text-emerald-600">${Number(inv.paid).toLocaleString()} ج.م</td>
+                        <td class="p-4 font-extrabold text-rose-600 bg-rose-50/50">${Number(inv.remaining).toLocaleString()} ج.م</td>
+                        <td class="p-4 text-center">${imgCell}</td>
+                        <td class="p-4 text-center space-x-2 space-x-reverse">
+                            <button onclick="promptPayInvoice('${inv.invoiceNo}')" class="text-emerald-600 hover:text-emerald-800 font-bold text-xs bg-emerald-50 px-2.5 py-1.5 rounded-lg transition">+ سداد دفعة</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openSupplierModal() {
+            document.getElementById('supInvoiceForm').reset();
+            currentUploadedImageBase64 = "";
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
+            
+            // ملء قائمة الموردين للاختيار السريع
+            const profiles = SupplierProfilesDB.getAll();
+            const datalist = document.getElementById('registeredSuppliersList');
+            datalist.innerHTML = profiles.map(p => `<option value="${p.name}">`).join('');
+
+            calcSupplierTotals();
+            document.getElementById('supplierModal').classList.remove('hidden');
+        }
+
+        function closeSupplierModal() {
+            document.getElementById('supplierModal').classList.add('hidden');
+        }
+
+        function calcSupplierTotals() {
+            const total = parseFloat(document.getElementById('supTotal').value) || 0;
+            const paid = parseFloat(document.getElementById('supPaid').value) || 0;
+            const remaining = Math.max(0, total - paid);
+
+            document.getElementById('supRemaining').value = remaining.toLocaleString() + ' ج.م';
+        }
+
+        function previewInvoiceImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    currentUploadedImageBase64 = evt.target.result;
+                    document.getElementById('imagePreview').src = evt.target.result;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleSupplierInvoiceSubmit(e) {
+            e.preventDefault();
+
+            const qty = parseInt(document.getElementById('supQty').value) || 0;
+            const total = parseFloat(document.getElementById('supTotal').value) || 0;
+            const paid = parseFloat(document.getElementById('supPaid').value) || 0;
+            const remaining = Math.max(0, total - paid);
+            const supName = document.getElementById('supName').value.trim();
+
+            const invoice = {
+                invoiceNo: document.getElementById('supInvNo').value.trim(),
+                supplierName: supName,
+                date: new Date().toISOString().split('T')[0],
+                qty: qty,
+                total: total,
+                paid: paid,
+                remaining: remaining,
+                imageUrl: currentUploadedImageBase64,
+                imageBase64: currentUploadedImageBase64
+            };
+
+            SupplierDB.save(invoice);
+
+            // التأكد من حفظ المورد تلقائياً في دليل الموردين إذا لم يكن مسجلاً
+            const existingProf = SupplierProfilesDB.getAll().find(p => p.name === supName);
+            if (!existingProf) {
+                SupplierProfilesDB.save({
+                    id: "SUP-" + Math.floor(100 + Math.random() * 900),
+                    name: supName,
+                    phone: "-",
+                    address: "-",
+                    notes: "تمت إضافته من فاتورة شراء"
+                });
+            }
+
+            showToast("تم تسجيل فاتورة الشراء بنجاح وتحديث مديونية المورد!");
+            closeSupplierModal();
+            renderSupplierInvoices();
+        }
+
+        function promptPayInvoice(invoiceNo) {
+            const amount = parseFloat(prompt(`أدخل المبلغ المسدد لفاتورة الشراء [${invoiceNo}]:`));
+            if (amount && amount > 0) {
+                SupplierDB.pay(invoiceNo, amount);
+                showToast(`تم تسجيل سداد مبلغ ${amount.toLocaleString()} ج.م للفاتورة`);
+                renderSupplierInvoices();
+            }
+        }
+
+        // ================= 2. قسم دليل بيانات الموردين =================
+        function renderSupplierProfiles() {
+            const profiles = SupplierProfilesDB.getAll();
+            const invoices = SupplierDB.getAll();
+            const tbody = document.getElementById('supplierProfilesTableBody');
+
+            if (profiles.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400">لا يوجد موردين مسجلين في الدليل بعد</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = profiles.map(prof => {
+                const supInvoices = invoices.filter(i => i.supplierName === prof.name);
+                const invCount = supInvoices.length;
+                const totalRem = supInvoices.reduce((s, i) => s + (Number(i.remaining) || 0), 0);
+
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-4 font-mono font-bold text-slate-500">${prof.id || 'SUP'}</td>
+                        <td class="p-4 font-bold text-slate-900">${prof.name}</td>
+                        <td class="p-4 font-mono text-slate-700">${prof.phone || '-'}</td>
+                        <td class="p-4 text-slate-600 text-xs">${prof.address || '-'}</td>
+                        <td class="p-4 text-center font-bold">${invCount} فواتير</td>
+                        <td class="p-4 font-extrabold ${totalRem > 0 ? 'text-rose-600 bg-rose-50/50' : 'text-emerald-600'}">
+                            ${totalRem.toLocaleString()} ج.م
+                        </td>
+                        <td class="p-4 text-slate-500 text-xs">${prof.notes || '-'}</td>
+                        <td class="p-4 text-center space-x-2 space-x-reverse">
+                            <button onclick="editProfile('${prof.name}')" class="text-blue-600 hover:text-blue-800 font-bold text-xs bg-blue-50 px-2.5 py-1.5 rounded-lg transition">تعديل</button>
+                            <button onclick="deleteProfile('${prof.name}')" class="text-rose-600 hover:text-rose-800 font-bold text-xs bg-rose-50 px-2.5 py-1.5 rounded-lg transition">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openProfileModal() {
+            document.getElementById('profileForm').reset();
+            document.getElementById('profileModalTitle').innerText = "إضافة مورد جديد للدليل 🏢";
+            document.getElementById('profName').readOnly = false;
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        function editProfile(name) {
+            const prof = SupplierProfilesDB.getAll().find(p => p.name === name);
+            if (!prof) return;
+
+            document.getElementById('profileModalTitle').innerText = "تعديل بيانات المورد: " + name;
+            document.getElementById('profName').value = prof.name;
+            document.getElementById('profName').readOnly = true;
+            document.getElementById('profPhone').value = prof.phone || '';
+            document.getElementById('profAddress').value = prof.address || '';
+            document.getElementById('profNotes').value = prof.notes || '';
+
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function handleProfileSubmit(e) {
+            e.preventDefault();
+
+            const profile = {
+                id: "SUP-" + Math.floor(100 + Math.random() * 900),
+                name: document.getElementById('profName').value.trim(),
+                phone: document.getElementById('profPhone').value.trim() || "-",
+                address: document.getElementById('profAddress').value.trim() || "-",
+                notes: document.getElementById('profNotes').value.trim() || "-"
+            };
+
+            SupplierProfilesDB.save(profile);
+            showToast(`تم حفظ بيانات المورد [${profile.name}] بنجاح!`);
+            closeProfileModal();
+            renderSupplierProfiles();
+        }
+
+        function deleteProfile(name) {
+            if (confirm(`هل أنت متأكد من حذف المورد [${name}] من الدليل؟`)) {
+                SupplierProfilesDB.delete(name);
+                showToast(`تم حذف المورد [${name}]`);
+                renderSupplierProfiles();
+            }
+        }
+
+        function viewFullImage(src) {
+            document.getElementById('modalFullImage').src = src;
+            document.getElementById('viewImageModal').classList.remove('hidden');
+        }
+
+        function closeImageViewer() {
+            document.getElementById('viewImageModal').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSupplierInvoices();
+        });
+    </script>
+</body>
+</html>

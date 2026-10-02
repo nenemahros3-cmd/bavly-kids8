@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bavly Kids - المخزن والموديلات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Cairo', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden text-slate-800">
+
+    <!-- القائمة الجانبية (Sidebar) -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-xl shrink-0 z-20">
+        <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl">👶</span>
+                <div>
+                    <h1 class="text-xl font-extrabold text-pink-400 leading-tight">Bavly Kids</h1>
+                    <p class="text-[11px] text-slate-400">إدارة المحل والمصنع</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <a href="الشاشة_الرئيسية.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">📊</span>
+                <span>الشاشة الرئيسية</span>
+            </a>
+            <a href="الفاتورة.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">🧾</span>
+                <span>الفاتورة (البيع)</span>
+            </a>
+            <a href="المخزن.html" class="flex items-center gap-3 py-3 px-4 rounded-xl bg-pink-600 text-white font-bold shadow-md shadow-pink-600/20">
+                <span class="text-lg">📦</span>
+                <span>المخزن والموديلات</span>
+            </a>
+            <a href="فواتير_الموردين.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">🚚</span>
+                <span>فواتير وبيانات الموردين</span>
+            </a>
+            <a href="الشيكات_والتسديد.html" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-800 text-slate-300 font-semibold transition">
+                <span class="text-lg">💳</span>
+                <span>الشيكات والتسديد</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- المحتوى الرئيسي (Main Content) -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
+        
+        <!-- هيدر الصفحة والتحكم -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">إدارة بضاعة المخزن والموديلات 📦</h2>
+                <p class="text-xs text-slate-500 mt-1">تسجيل الموديل، الألوان، المقاس، الكميات، سعر الجملة، وسعر البيع</p>
+            </div>
+            <button onclick="openItemModal()" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-xl font-bold transition flex items-center gap-2 shadow-lg shadow-pink-600/20">
+                <span>+</span> إضافة موديل جديد للمخزن
+            </button>
+        </div>
+
+        <!-- كروت الإحصاءات السريعة للمخزن -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-500">إجمالي الموديلات المسجلة</span>
+                <h3 id="statTotalModels" class="text-2xl font-extrabold text-slate-800 mt-2">0</h3>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-500">إجمالي عدد القطع في المخزن</span>
+                <h3 id="statTotalPieces" class="text-2xl font-extrabold text-blue-600 mt-2">0 قطعة</h3>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-500">إجمالي رأس المال (بسعر الجملة)</span>
+                <h3 id="statTotalCost" class="text-2xl font-extrabold text-purple-600 mt-2">0 ج.م</h3>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span class="text-xs font-bold text-slate-500">القيمة البيعية المتوقعة</span>
+                <h3 id="statTotalSell" class="text-2xl font-extrabold text-emerald-600 mt-2">0 ج.م</h3>
+            </div>
+        </div>
+
+        <!-- شريط البحث والتصفية -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-4 justify-between items-center">
+            <div class="relative w-full sm:w-96">
+                <input type="text" id="searchInput" oninput="filterInventory()" placeholder="🔍 ابحث برقم الموديل، الاسم، أو اللون..." class="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 px-4 text-sm focus:border-pink-500 outline-none">
+            </div>
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+                <span class="inline-block w-3 h-3 rounded-full bg-rose-500"></span> أحمر: أقل من 5 قطع (نواقص)
+                <span class="inline-block w-3 h-3 rounded-full bg-emerald-500 mr-2"></span> أخضر: متوفر
+            </div>
+        </div>
+
+        <!-- جدول المخزن والموديلات بالـ 7 حقول المطلوبة نصاً -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                            <th class="p-4">1. رقم الموديل</th>
+                            <th class="p-4">2. اسم الموديل</th>
+                            <th class="p-4">3. الألوان</th>
+                            <th class="p-4">4. المقاس</th>
+                            <th class="p-4">5. الكمية بالمخزن</th>
+                            <th class="p-4">6. سعر الجملة (التكلفة)</th>
+                            <th class="p-4">7. سعر البيع</th>
+                            <th class="p-4 text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody" class="divide-y divide-slate-100 text-sm">
+                        <!-- ديناميكي -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal: نافذة إضافة أو تعديل موديل -->
+    <div id="itemModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-lg shadow-2xl space-y-5 animate-in fade-in zoom-in duration-200">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="modalTitle" class="text-xl font-bold text-slate-800">إضافة موديل جديد للمخزن 👕</h3>
+                <button onclick="closeItemModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
+            </div>
+
+            <form id="itemForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">رقم الموديل (الكود) *</label>
+                        <input type="text" id="modelCode" placeholder="مثال: M-104" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-mono focus:border-pink-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">اسم الموديل *</label>
+                        <input type="text" id="modelName" placeholder="مثال: طقم بناتي صيفي" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">الألوان المتاحة</label>
+                        <input type="text" id="modelColors" placeholder="أحمر / كحلي / أصفر" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">المقاس</label>
+                        <input type="text" id="modelSize" placeholder="2-4 أو 6 أو L" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm focus:border-pink-500 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">الكمية بالمخزن *</label>
+                    <input type="number" id="modelQty" min="0" placeholder="عدد القطع" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-bold focus:border-pink-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">سعر الجملة (التكلفة) *</label>
+                        <input type="number" id="modelCost" step="0.5" min="0" placeholder="0" required class="w-full bg-white border border-slate-300 rounded-xl p-2.5 text-sm font-bold text-slate-700 focus:border-pink-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">سعر البيع (القطاعي) *</label>
+                        <input type="number" id="modelSell" step="0.5" min="0" placeholder="0" required class="w-full bg-white border border-slate-300 rounded-xl p-2.5 text-sm font-bold text-pink-600 focus:border-pink-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3">
+                    <button type="button" onclick="closeItemModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-100 transition">إلغاء</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-sm font-bold shadow-lg shadow-pink-600/20 transition">حفظ في المخزن</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let isEditing = false;
+
+        function renderInventory(itemsToRender = null) {
+            const items = itemsToRender || InventoryDB.getAll();
+            const tbody = document.getElementById('inventoryTableBody');
+
+            // تحديث الإحصائيات
+            const allItems = InventoryDB.getAll();
+            document.getElementById('statTotalModels').innerText = allItems.length;
+            const totalPieces = allItems.reduce((s, i) => s + (Number(i.qty) || 0), 0);
+            const totalCost = allItems.reduce((s, i) => s + ((Number(i.qty) || 0) * (Number(i.costPrice) || 0)), 0);
+            const totalSell = allItems.reduce((s, i) => s + ((Number(i.qty) || 0) * (Number(i.sellPrice) || 0)), 0);
+
+            document.getElementById('statTotalPieces').innerText = `${totalPieces.toLocaleString()} قطعة`;
+            document.getElementById('statTotalCost').innerText = `${totalCost.toLocaleString()} ج.م`;
+            document.getElementById('statTotalSell').innerText = `${totalSell.toLocaleString()} ج.م`;
+
+            if (items.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400">لا توجد موديلات مطابقة في المخزن</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = items.map(item => {
+                const isLow = Number(item.qty) <= 5;
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-4 font-mono font-bold text-slate-900">${item.code}</td>
+                        <td class="p-4 font-bold text-slate-800">${item.name}</td>
+                        <td class="p-4 text-slate-600 text-xs">${item.colors || '-'}</td>
+                        <td class="p-4 font-mono text-slate-600 text-xs">${item.size || '-'}</td>
+                        <td class="p-4 font-extrabold ${isLow ? 'text-rose-600 bg-rose-50' : 'text-emerald-700'}">
+                            ${item.qty} قطعة ${isLow ? '<span class="text-[10px] text-rose-500 block">⚠️ أوشك على النفاد</span>' : ''}
+                        </td>
+                        <td class="p-4 font-bold text-slate-700">${Number(item.costPrice).toLocaleString()} ج.م</td>
+                        <td class="p-4 font-extrabold text-pink-600">${Number(item.sellPrice).toLocaleString()} ج.م</td>
+                        <td class="p-4 text-center space-x-2 space-x-reverse">
+                            <button onclick="editItem('${item.code}')" class="text-blue-600 hover:text-blue-800 font-bold text-xs bg-blue-50 px-2.5 py-1.5 rounded-lg transition">تعديل</button>
+                            <button onclick="deleteItem('${item.code}')" class="text-rose-600 hover:text-rose-800 font-bold text-xs bg-rose-50 px-2.5 py-1.5 rounded-lg transition">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterInventory() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const allItems = InventoryDB.getAll();
+            if (!query) {
+                renderInventory();
+                return;
+            }
+            const filtered = allItems.filter(i => 
+                (i.code && i.code.toLowerCase().includes(query)) ||
+                (i.name && i.name.toLowerCase().includes(query)) ||
+                (i.colors && i.colors.toLowerCase().includes(query))
+            );
+            renderInventory(filtered);
+        }
+
+        function openItemModal() {
+            isEditing = false;
+            document.getElementById('modalTitle').innerText = "إضافة موديل جديد للمخزن 👕";
+            document.getElementById('itemForm').reset();
+            document.getElementById('modelCode').readOnly = false;
+            document.getElementById('itemModal').classList.remove('hidden');
+            document.getElementById('modelCode').focus();
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemModal').classList.add('hidden');
+        }
+
+        function editItem(code) {
+            const item = InventoryDB.getAll().find(i => String(i.code).trim() === String(code).trim());
+            if (!item) return;
+
+            isEditing = true;
+            document.getElementById('modalTitle').innerText = "تعديل بيانات الموديل: " + item.code;
+            document.getElementById('modelCode').value = item.code;
+            document.getElementById('modelCode').readOnly = true;
+            document.getElementById('modelName').value = item.name;
+            document.getElementById('modelColors').value = item.colors || '';
+            document.getElementById('modelSize').value = item.size || '';
+            document.getElementById('modelQty').value = item.qty;
+            document.getElementById('modelCost').value = item.costPrice;
+            document.getElementById('modelSell').value = item.sellPrice;
+
+            document.getElementById('itemModal').classList.remove('hidden');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const item = {
+                code: document.getElementById('modelCode').value.trim(),
+                name: document.getElementById('modelName').value.trim(),
+                colors: document.getElementById('modelColors').value.trim() || 'متنوع',
+                size: document.getElementById('modelSize').value.trim() || 'حر',
+                qty: parseInt(document.getElementById('modelQty').value) || 0,
+                costPrice: parseFloat(document.getElementById('modelCost').value) || 0,
+                sellPrice: parseFloat(document.getElementById('modelSell').value) || 0
+            };
+
+            InventoryDB.save(item);
+            showToast(`تم حفظ الموديل (${item.name}) بنجاح في المخزن ومزامنة الشيت`);
+            closeItemModal();
+            renderInventory();
+        }
+
+        function deleteItem(code) {
+            if (confirm(`هل أنت متأكد من حذف الموديل رقم [${code}] من المخزن؟`)) {
+                InventoryDB.delete(code);
+                showToast(`تم حذف الموديل [${code}]`);
+                renderInventory();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderInventory();
+        });
+    </script>
+</body>
+</html>
